@@ -10,3 +10,7 @@ output "database_url" {
   value = "mssql://${local.user}:${local.password}@${local.fqdn}:${local.port}"
   sensitive = true
 }
+
+output "sql_sp" {
+  value = "Add ${data.azuread_service_principal.db.display_name} to the Directory Reader role"
+}
