@@ -1,6 +1,7 @@
 
 locals {
     instance_name = "sql-${replace(var.sql_version, ".", "")}-${lower(var.env)}-${lower(replace(var.location, " ", ""))}-${random_id.instance_id.hex}"
+    resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
     suffix  = "${lower(var.env)}-${lower(replace(var.location, " ", ""))}"
 }
 
@@ -28,7 +29,7 @@ resource "random_password" "sa" {
 
 resource "azurerm_storage_account" "db" {
   name                     = "st${substr(replace(local.instance_name, "-", ""), 0, 14)}${random_id.instance_id.hex}"
-  resource_group_name      = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
+  resource_group_name      = local.resource_group_name
   location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
@@ -42,7 +43,7 @@ resource "azurerm_storage_account" "db" {
 resource "azurerm_mssql_server" "db" {
   name                = local.instance_name
   location            = var.location
-  resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
+  resource_group_name = local.resource_group_name
 
   version                      = var.sql_version
   administrator_login          = "sa${random_id.instance_id.hex}"
@@ -103,7 +104,7 @@ resource "azurerm_mssql_server_extended_auditing_policy" "audit" {
 }
 
 resource "azurerm_mssql_server_security_alert_policy" "alert" {
-  resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
+  resource_group_name = local.resource_group_name
   server_name         = azurerm_mssql_server.db.name
   state               = "Enabled"
 }
