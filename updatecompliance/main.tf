@@ -1,26 +1,11 @@
 
-locals {
-  suffix  = "${lower(var.env)}-${lower(replace(var.location, " ", ""))}"
-}
+module "log" {
+  source              = "../log-analytics"
 
-resource "random_id" "instance_id" {
-  byte_length = 4
-}
-
-resource "azurerm_resource_group" "rg" {
-  count    = var.resource_group_name == "" ? 1 : 0
-
-  name     = "rg-updatecompliance-${local.suffix}"
-  location = var.location
-
-  tags = var.tags
-}
-
-resource "azurerm_log_analytics_workspace" "log" {
-  name                = "log-updatecompliance-${local.suffix}-${random_id.instance_id.hex}"
+  env                 = var.env
   location            = var.location
-  resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
-  sku                 = "pergb2018"
+  name                = "updatecompliance"
+  resource_group_name = var.resource_group_name
 
   tags = var.tags
 }
@@ -28,9 +13,9 @@ resource "azurerm_log_analytics_workspace" "log" {
 resource "azurerm_log_analytics_solution" "wufb" {
   solution_name         = "WaaSUpdateInsights"
   location              = var.location
-  resource_group_name   = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
-  workspace_resource_id = azurerm_log_analytics_workspace.log.id
-  workspace_name        = azurerm_log_analytics_workspace.log.name
+  resource_group_name   = module.log.resource_group_name
+  workspace_resource_id = module.log.id
+  workspace_name        = module.log.name
 
   plan {
     publisher = "Microsoft"
