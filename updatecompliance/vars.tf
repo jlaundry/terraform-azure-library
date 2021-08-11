@@ -7,8 +7,13 @@ variable "location" {
   type = string
 }
 
+variable "name" {
+  type    = string
+  default = "updatecompliance"
+}
+
 variable "resource_group_name" {
-  type = string
+  type    = string
   default = ""
 }
 

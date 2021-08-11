@@ -1,11 +1,25 @@
 
+locals {
+  resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
+  suffix = "${lower(var.env)}-${replace(lower(var.location), " ", "")}"
+}
+
+resource "azurerm_resource_group" "rg" {
+  count    = var.resource_group_name == "" ? 1 : 0
+
+  name     = "rg-${var.name}-${local.suffix}"
+  location = var.location
+
+  tags = var.tags
+}
+
 module "log" {
   source              = "../log-analytics"
 
   env                 = var.env
   location            = var.location
-  name                = "updatecompliance"
-  resource_group_name = var.resource_group_name
+  name                = var.name
+  resource_group_name = local.resource_group_name
 
   tags = var.tags
 }
