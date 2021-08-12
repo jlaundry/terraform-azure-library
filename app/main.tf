@@ -12,7 +12,7 @@ locals {
   app_service_user     = azurerm_app_service.app.site_credential[0].username
   app_service_password = azurerm_app_service.app.site_credential[0].password
 
-  instance_name = "${var.name}-${lower(var.env)}-${lower(replace(var.location, " ", ""))}-${random_id.instance_id.hex}"
+  instance_name = "${var.name}-${local.suffix}-${random_id.instance_id.hex}"
 
   kv_appinsights_instrumentationkey_name = "appinsightsikey"
   kv_appinsights_connection_string_name  = "appiconnectionstr"

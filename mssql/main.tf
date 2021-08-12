@@ -1,6 +1,6 @@
 
 locals {
-    instance_name = "sql-${replace(var.sql_version, ".", "")}-${lower(var.env)}-${lower(replace(var.location, " ", ""))}-${random_id.instance_id.hex}"
+    instance_name = "sql-${replace(var.sql_version, ".", "")}-${local.suffix}-${random_id.instance_id.hex}"
     resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
     suffix  = "${lower(var.env)}-${lower(replace(var.location, " ", ""))}"
 }
