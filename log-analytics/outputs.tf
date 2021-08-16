@@ -22,3 +22,7 @@ output "resource_group_name" {
 output "secondary_shared_key" {
     value = azurerm_log_analytics_workspace.log.secondary_shared_key
 }
+
+output "workspace_id" {
+    value = azurerm_log_analytics_workspace.log.workspace_id
+}
