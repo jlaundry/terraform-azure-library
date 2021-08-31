@@ -31,8 +31,9 @@ variable "resource_group_name" {
   default = ""
 }
 
-variable "repository_name" {
-  type = string
+variable "github_repository_name" {
+  type    = string
+  default = ""
 }
 
 variable "tags" {
