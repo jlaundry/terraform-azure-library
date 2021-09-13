@@ -48,6 +48,7 @@ resource "azurerm_mssql_server" "db" {
   version                      = var.sql_version
   administrator_login          = "sa${random_id.instance_id.hex}"
   administrator_login_password = random_password.sa.result
+  minimum_tls_version          = var.minimum_tls_version
 
   azuread_administrator {
     login_username = "aadadmin"
