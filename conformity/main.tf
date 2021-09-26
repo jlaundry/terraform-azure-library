@@ -77,7 +77,6 @@ resource "random_password" "conformity" {
 
 resource "azuread_application_password" "conformity" {
   application_object_id = azuread_application.conformity.id
-  description           = "Terraform managed"
   value                 = random_password.conformity.result
   end_date              = var.secret_end_date
 }
