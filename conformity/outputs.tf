@@ -8,6 +8,6 @@ output "client_id" {
 }
 
 output "client_secret" {
-    value = random_password.conformity.result
+    value = azuread_application_password.conformity.value
     sensitive = true
 }

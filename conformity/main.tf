@@ -70,14 +70,8 @@ data "azuread_service_principal" "conformity" {
   application_id = azuread_application.conformity.application_id
 }
 
-resource "random_password" "conformity" {
-  length           = 32
-  special          = false
-}
-
 resource "azuread_application_password" "conformity" {
   application_object_id = azuread_application.conformity.id
-  value                 = random_password.conformity.result
   end_date              = var.secret_end_date
 }
 
