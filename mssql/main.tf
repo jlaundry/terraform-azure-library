@@ -1,4 +1,16 @@
 
+terraform {
+  required_providers {
+    azuread = {
+      source = "hashicorp/azuread"
+      version = ">= 2.4.0"
+    }
+    azurerm = {
+      source = "hashicorp/azurerm"
+    }
+  }
+}
+
 locals {
     instance_name = "sql-${replace(var.sql_version, ".", "")}-${local.suffix}-${random_id.instance_id.hex}"
     resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
@@ -70,6 +82,15 @@ data "azuread_service_principal" "db" {
   display_name = azurerm_mssql_server.db.name
 }
 
+resource "azuread_directory_role" "directory_reader" {
+  display_name = "Directory Readers"
+}
+
+resource "azuread_directory_role_member" "db_directory_reader" {
+  role_object_id   = azuread_directory_role.directory_reader.object_id
+  member_object_id = data.azuread_service_principal.db.object_id
+}
+
 # resource "azuread_group_member" "db" {
 #   group_object_id  = var.sql_server_group_id
 #   member_object_id = data.azuread_service_principal.db.object_id
@@ -77,7 +98,7 @@ data "azuread_service_principal" "db" {
 
 resource "azurerm_role_assignment" "db_storage" {
   scope                = azurerm_storage_account.db.id
-  role_definition_name = "Contributor"
+  role_definition_name = "Storage Blob Data Contributor"
   principal_id         = data.azuread_service_principal.db.object_id
 }
 
