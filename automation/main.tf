@@ -1,4 +1,13 @@
 
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = ">= 2.78.0"
+    }
+  }
+}
+
 locals {
   instance_id         = var.instance_id != "" ? var.instance_id : random_id.instance_id[0].hex
   name                = "${var.name}${substr(replace(local.suffix, "-", ""), 0, 31)}${local.instance_id}"
@@ -241,10 +250,21 @@ resource "azurerm_monitor_diagnostic_setting" "logs" {
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.log.id
 
   log {
+    category = "AuditEvent"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
+
+  log {
     category = "JobLogs"
     enabled  = true
 
     retention_policy {
+      days    = 0
       enabled = false
     }
   }
@@ -254,6 +274,7 @@ resource "azurerm_monitor_diagnostic_setting" "logs" {
     enabled  = true
 
     retention_policy {
+      days    = 0
       enabled = false
     }
   }
@@ -263,6 +284,7 @@ resource "azurerm_monitor_diagnostic_setting" "logs" {
     enabled  = true
 
     retention_policy {
+      days    = 0
       enabled = false
     }
   }
@@ -272,6 +294,7 @@ resource "azurerm_monitor_diagnostic_setting" "logs" {
     enabled = false
 
     retention_policy {
+      days    = 0
       enabled = false
     }
   }
@@ -282,6 +305,16 @@ resource "azurerm_monitor_diagnostic_setting" "metrics" {
   name                       = "automation_metrics"
   target_resource_id         = azurerm_automation_account.automation.id
   log_analytics_workspace_id = data.azurerm_log_analytics_workspace.log.id
+
+  log {
+    category = "AuditEvent"
+    enabled  = false
+
+    retention_policy {
+      days    = 0
+      enabled = false
+    }
+  }
 
   log {
     category = "JobLogs"
