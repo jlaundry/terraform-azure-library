@@ -23,6 +23,11 @@ variable "location" {
     type = string
 }
 
+variable "minimum_tls_version" {
+    type    = string
+    default = "1.2"
+}
+
 variable "resource_group_name" {
     type    = string
     default = ""
