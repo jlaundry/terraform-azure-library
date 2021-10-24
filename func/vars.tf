@@ -17,6 +17,11 @@ variable "location" {
   type = string
 }
 
+variable "log_retention" {
+  type    = number
+  default = 30
+}
+
 variable "name" {
   type    = string
 }

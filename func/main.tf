@@ -49,13 +49,24 @@ resource "azurerm_storage_account" "app" {
   tags = var.tags
 }
 
+resource "azurerm_log_analytics_workspace" "log" {
+  name                = "log-${local.instance_name}"
+  location            = var.location
+  resource_group_name = local.resource_group_name
+  sku                 = "pergb2018"
+
+  retention_in_days   = var.log_retention
+
+  tags = var.tags
+}
+
 resource "azurerm_application_insights" "appi" {
   name                = "appi-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.log.id
 
-  retention_in_days   = 90
+  application_type    = "web"
 
   tags = var.tags
 }
