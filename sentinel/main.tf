@@ -2,6 +2,7 @@
 
 locals {
   instance_id         = random_id.instance_id.hex
+  instance_name        = "${lower(var.name)}-${local.suffix}-${random_id.instance_id.hex}"
   resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
   suffix              = "${lower(var.env)}-${replace(lower(var.location), " ", "")}"
 }
@@ -19,26 +20,23 @@ resource "azurerm_resource_group" "rg" {
   tags = var.tags
 }
 
-module "log" {
-  source              = "../log-analytics"
-
-  env                 = var.env
-  instance_id         = local.instance_id
+resource "azurerm_log_analytics_workspace" "log" {
+  name                = "log-${local.instance_name}"
   location            = var.location
-  name                = var.name
   resource_group_name = local.resource_group_name
+  sku                 = "pergb2018"
+
+  retention_in_days   = var.log_retention
 
   tags = var.tags
-
-  # TODO set retention to 90 days
 }
 
 resource "azurerm_log_analytics_solution" "securityinsights" {
   solution_name         = "SecurityInsights"
   location              = var.location
   resource_group_name   = local.resource_group_name
-  workspace_resource_id = module.log.id
-  workspace_name        = module.log.name
+  workspace_resource_id = azurerm_log_analytics_workspace.log.id
+  workspace_name        = azurerm_log_analytics_workspace.log.name
 
   plan {
     publisher = "Microsoft"
@@ -49,13 +47,17 @@ resource "azurerm_log_analytics_solution" "securityinsights" {
 }
 
 resource "azurerm_sentinel_data_connector_azure_active_directory" "aad" {
+  count    = var.enable_aad_connector ? 1 : 0
+
   name                       = "aad"
-  log_analytics_workspace_id = module.log.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
 } # TODO manual: enable Create Incidents
 
 resource "azurerm_sentinel_data_connector_azure_security_center" "asc" {
+  count    = var.enable_asc_connector ? 1 : 0
+
   name                       = "asc"
-  log_analytics_workspace_id = module.log.id
+  log_analytics_workspace_id = azurerm_log_analytics_workspace.log.id
 } # TODO manual: enable Create Incidents
 
 data "azuread_client_config" "current" {

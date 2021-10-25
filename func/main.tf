@@ -12,7 +12,7 @@ locals {
   app_service_user     = azurerm_function_app.func.site_credential[0].username
   app_service_password = azurerm_function_app.func.site_credential[0].password
 
-  instance_name        = "${var.name}-${local.suffix}-${random_id.instance_id.hex}"
+  instance_name        = "${lower(var.name)}-${local.suffix}-${random_id.instance_id.hex}"
   resource_group_name  = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
   suffix               = "${lower(var.env)}-${lower(replace(var.location, " ", ""))}"
 }
