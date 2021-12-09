@@ -31,6 +31,12 @@ resource "azurerm_log_analytics_workspace" "log" {
   tags = var.tags
 }
 
+resource "azurerm_management_lock" "log-lock" {
+  name       = "log-lock"
+  scope      = azurerm_log_analytics_workspace.log.id
+  lock_level = "Delete"
+}
+
 resource "azurerm_log_analytics_solution" "securityinsights" {
   solution_name         = "SecurityInsights"
   location              = var.location
