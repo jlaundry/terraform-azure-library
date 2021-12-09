@@ -34,7 +34,7 @@ resource "azurerm_log_analytics_workspace" "log" {
 resource "azurerm_management_lock" "log-lock" {
   name       = "log-lock"
   scope      = azurerm_log_analytics_workspace.log.id
-  lock_level = "Delete"
+  lock_level = "CanNotDelete"
 }
 
 resource "azurerm_log_analytics_solution" "securityinsights" {
