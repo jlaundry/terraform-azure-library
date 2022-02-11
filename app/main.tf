@@ -180,6 +180,7 @@ resource "azurerm_app_service" "app" {
       "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.appi.instrumentation_key
       "APPLICATIONINSIGHTS_CONNECTION_STRING"  = azurerm_application_insights.appi.connection_string
       "DATABASE_URL" = "@Microsoft.KeyVault(SecretUri=https://${local.kv_name}.vault.azure.net/secrets/${local.kv_database_url_name}/)"
+      "KUDU_BUILD_VERSION" = "1.0.0"
       "SCM_DO_BUILD_DURING_DEPLOYMENT" = "true"
       "SECRET_KEY" = "@Microsoft.KeyVault(SecretUri=https://${local.kv_name}.vault.azure.net/secrets/${local.kv_django_secret_key_name}/)"
       # "WEBSITE_RUN_FROM_PACKAGE" = "1"
