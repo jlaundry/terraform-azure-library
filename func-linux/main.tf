@@ -12,9 +12,9 @@ terraform {
 }
 
 locals {
-  app_service_host     = azurerm_function_app.func.name
-  app_service_user     = azurerm_function_app.func.site_credential[0].username
-  app_service_password = azurerm_function_app.func.site_credential[0].password
+  app_service_host     = azurerm_linux_function_app.func.name
+  app_service_user     = azurerm_linux_function_app.func.site_credential[0].name
+  app_service_password = azurerm_linux_function_app.func.site_credential[0].password
 
   instance_name        = "${lower(var.name)}-${local.suffix}-${random_id.instance_id.hex}"
   resource_group_name  = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
@@ -86,17 +86,15 @@ resource "azurerm_service_plan" "asp" {
   tags = var.tags
 }
 
-resource "azurerm_function_app" "func" {
+resource "azurerm_linux_function_app" "func" {
   name                = "func-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  app_service_plan_id = azurerm_service_plan.asp.id
+  service_plan_id     = azurerm_service_plan.asp.id
 
   storage_account_name       = azurerm_storage_account.app.name
   storage_account_access_key = azurerm_storage_account.app.primary_access_key
 
-  version                    = "~3"
-  os_type                    = var.os_type
   https_only                 = true
 
   identity {
@@ -105,16 +103,21 @@ resource "azurerm_function_app" "func" {
 
   app_settings = merge(
     {
-      FUNCTIONS_WORKER_RUNTIME = "python"
-      APPINSIGHTS_INSTRUMENTATIONKEY = azurerm_application_insights.appi.instrumentation_key
-      APPLICATIONINSIGHTS_CONNECTION_STRING = azurerm_application_insights.appi.connection_string
+      # FUNCTIONS_WORKER_RUNTIME = "python"
     },
     var.app_settings,
   )
 
   site_config {
-    linux_fx_version  = var.linux_fx_version
-    ftps_state        = "Disabled"
+    application_stack {
+      powershell_core_version = lookup(var.application_stack, "powershell_core_version", null)
+      python_version          = lookup(var.application_stack, "python_version", null)
+    }
+
+    application_insights_connection_string = azurerm_application_insights.appi.connection_string    # APPLICATIONINSIGHTS_CONNECTION_STRING
+    application_insights_key               = azurerm_application_insights.appi.instrumentation_key  # APPINSIGHTS_INSTRUMENTATIONKEY
+    ftps_state                             = "Disabled"
+    scm_minimum_tls_version                = "1.2"
   }
 
   tags = var.tags

@@ -4,13 +4,20 @@ variable "app_settings" {
   default = {}
 }
 
+variable "application_stack" {
+  type        = map(string)
+  default     = {
+    python_version = "3.9"
+  }
+}
+
 variable "env" {
   type = string
 }
 
-variable "linux_fx_version" {
+variable "github_repository_name" {
   type    = string
-  default = "Python|3.8"
+  default = ""
 }
 
 variable "location" {
@@ -26,17 +33,7 @@ variable "name" {
   type    = string
 }
 
-variable "os_type" {
-  type    = string
-  default = "linux"
-}
-
 variable "resource_group_name" {
-  type    = string
-  default = ""
-}
-
-variable "github_repository_name" {
   type    = string
   default = ""
 }
