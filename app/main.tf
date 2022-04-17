@@ -160,7 +160,7 @@ resource "azurerm_application_insights" "appi" {
   tags = var.tags
 }
 
-data "azurerm_app_service_plan" "asp" {
+data "azurerm_service_plan" "asp" {
   name                = var.app_service_plan_name
   resource_group_name = var.app_service_plan_rg_name
 }
@@ -169,7 +169,7 @@ resource "azurerm_app_service" "app" {
   name                = "app-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  app_service_plan_id = data.azurerm_app_service_plan.asp.id
+  app_service_plan_id = data.azurerm_service_plan.asp.id
 
   site_config {
     linux_fx_version         = var.linux_fx_version

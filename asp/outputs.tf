@@ -1,6 +1,6 @@
 
 output "name" {
-   value = azurerm_app_service_plan.asp.name
+   value = azurerm_service_plan.asp.name
 }
 
 output "resource_group_name" {

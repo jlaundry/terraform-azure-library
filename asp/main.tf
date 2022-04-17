@@ -13,17 +13,13 @@ resource "azurerm_resource_group" "rg" {
   tags = var.tags
 }
 
-resource "azurerm_app_service_plan" "asp" {
+resource "azurerm_service_plan" "asp" {
   name                = "asp-${var.name}-${local.suffix}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  kind                = var.kind
-  reserved            = true
 
-  sku {
-    tier = var.sku_tier
-    size = var.sku_size
-  }
+  os_type             = var.os_type
+  sku_name            = var.sku_name
 
   tags = var.tags
 }

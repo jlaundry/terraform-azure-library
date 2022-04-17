@@ -3,11 +3,6 @@ variable "env" {
   type = string
 }
 
-variable "kind" {
-  type    = string
-  default = "Linux"
-}
-
 variable "location" {
   type = string
 }
@@ -16,17 +11,17 @@ variable "name" {
   type = string
 }
 
+variable "os_type" {
+  type    = string
+  default = "Linux"
+}
+
 variable "resource_group_name" {
   type    = string
   default = ""
 }
 
-variable "sku_tier" {
-  type    = string
-  default = "Basic"
-}
-
-variable "sku_size" {
+variable "sku_name" {
   type    = string
   default = "B1"
 }
