@@ -18,7 +18,7 @@ locals {
   instance_id          = var.instance_id != "" ? var.instance_id : random_id.instance_id[0].hex
   instance_name        = "${replace(var.domains[0], ".", "")}-${local.suffix}-${local.instance_id}"
   resource_group_name  = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
-  storage_account_name = "st${substr(replace(var.domains[0], ".", ""), 0, 14)}${local.instance_id}"
+  storage_account_name = var.storage_account_name != "" ? var.storage_account_name : "st${substr(replace(var.domains[0], ".", ""), 0, 14)}${local.instance_id}"
   suffix               = "${lower(var.env)}-${replace(lower(var.location), " ", "")}"
 }
 
