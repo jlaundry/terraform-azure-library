@@ -1,6 +1,10 @@
 
 terraform {
   required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 3.2.0"
+    }
     cloudflare = {
       source  = "cloudflare/cloudflare"
     }
@@ -56,7 +60,7 @@ resource "azurerm_storage_account" "public" {
   account_replication_type = "LRS"
 
   min_tls_version          = "TLS1_2"
-  allow_blob_public_access = true
+  allow_nested_items_to_be_public = true
 
   static_website {
     index_document = "index.html"

@@ -1,4 +1,12 @@
 
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 3.2.0"
+    }
+  }
+}
 
 locals {
   instance_id         = random_id.instance_id.hex
@@ -24,7 +32,7 @@ resource "azurerm_log_analytics_workspace" "log" {
   name                = "log-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  sku                 = "pergb2018"
+  sku                 = "PerGB2018"
 
   retention_in_days   = var.log_retention
 

@@ -1,4 +1,13 @@
 
+terraform {
+  required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 3.2.0"
+    }
+  }
+}
+
 locals {
   instance_id         = var.instance_id != "" ? var.instance_id : random_id.instance_id[0].hex
   resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
@@ -24,7 +33,7 @@ resource "azurerm_log_analytics_workspace" "log" {
   name                = "log-${var.name}-${local.suffix}-${local.instance_id}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  sku                 = "pergb2018"
+  sku                 = "PerGB2018"
 
   tags = var.tags
 }

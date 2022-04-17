@@ -1,6 +1,10 @@
 
 terraform {
   required_providers {
+    azurerm = {
+      source  = "hashicorp/azurerm"
+      version = ">= 3.2.0"
+    }
     github = {
       source = "integrations/github"
     }
@@ -140,7 +144,7 @@ resource "azurerm_storage_account" "app" {
   account_replication_type = "LRS"
 
   min_tls_version = "TLS1_2"
-  allow_blob_public_access = false
+  allow_nested_items_to_be_public = false
 
   tags = var.tags
 }
