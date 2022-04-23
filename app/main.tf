@@ -84,14 +84,13 @@ resource "azurerm_key_vault_access_policy" "kva_current" {
   object_id    = data.azurerm_client_config.current.object_id
 
   secret_permissions = [
-    "Backup",
-    "Delete",
     "Get",
     "List",
-    "Purge",
-    "Recover",
-    "Restore",
     "Set",
+    "Delete",
+    "Recover",
+    "Backup",
+    "Restore",
   ]
 }
 
