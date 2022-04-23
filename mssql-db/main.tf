@@ -8,9 +8,6 @@ terraform {
   }
 }
 
-provider "azuread" {
-}
-
 locals {
   suffix = "${lower(var.env)}-${lower(replace(var.location, " ", ""))}"
 }
