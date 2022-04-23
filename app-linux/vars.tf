@@ -12,6 +12,13 @@ variable "app_settings" {
   default = {}
 }
 
+variable "application_stack" {
+  type        = map(string)
+  default     = {
+    python_version = "3.9"
+  }
+}
+
 variable "database_url" {
   type    = string
   default = ""
@@ -23,11 +30,6 @@ variable "env" {
 
 variable "ip_allowlist" {
   type = list(string)
-}
-
-variable "linux_fx_version" {
-  type    = string
-  default = "PYTHON|3.8"
 }
 
 variable "location" {

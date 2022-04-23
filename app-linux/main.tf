@@ -12,9 +12,9 @@ terraform {
 }
 
 locals {
-  app_service_host     = azurerm_app_service.app.name
-  app_service_user     = azurerm_app_service.app.site_credential[0].username
-  app_service_password = azurerm_app_service.app.site_credential[0].password
+  app_service_host     = azurerm_linux_web_app.app.name
+  app_service_user     = azurerm_linux_web_app.app.site_credential[0].name
+  app_service_password = azurerm_linux_web_app.app.site_credential[0].password
 
   instance_name = "${var.name}-${local.suffix}-${random_id.instance_id.hex}"
 
@@ -69,7 +69,7 @@ resource "azurerm_key_vault" "kv" {
     default_action = "Deny"
     ip_rules       = concat(
       var.ip_allowlist,
-      azurerm_app_service.app.outbound_ip_address_list,
+      azurerm_linux_web_app.app.outbound_ip_address_list,
     )
   }
 
@@ -96,8 +96,8 @@ resource "azurerm_key_vault_access_policy" "kva_current" {
 
 resource "azurerm_key_vault_access_policy" "kva_app" {
   key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = azurerm_app_service.app.identity.0.tenant_id
-  object_id    = azurerm_app_service.app.identity.0.principal_id
+  tenant_id    = azurerm_linux_web_app.app.identity.0.tenant_id
+  object_id    = azurerm_linux_web_app.app.identity.0.principal_id
 
   secret_permissions = [
     "Get",
@@ -164,16 +164,20 @@ data "azurerm_service_plan" "asp" {
   resource_group_name = var.app_service_plan_rg_name
 }
 
-resource "azurerm_app_service" "app" {
+resource "azurerm_linux_web_app" "app" {
   name                = "app-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  app_service_plan_id = data.azurerm_service_plan.asp.id
+  service_plan_id     = data.azurerm_service_plan.asp.id
 
   site_config {
-    linux_fx_version         = var.linux_fx_version
-    ftps_state               = "Disabled"
-    min_tls_version          = "1.2"
+    application_stack {
+      python_version          = lookup(var.application_stack, "python_version", null)
+    }
+
+    always_on                              = true
+    ftps_state                             = "Disabled"
+    scm_minimum_tls_version                = "1.2"
   }
 
   https_only = true
@@ -246,7 +250,7 @@ resource "azurerm_dns_cname_record" "app" {
   zone_name           = data.azurerm_dns_zone.zone[0].name
   resource_group_name = data.azurerm_dns_zone.zone[0].resource_group_name
   ttl                 = 60
-  record              = azurerm_app_service.app.default_site_hostname
+  record              = azurerm_linux_web_app.app.default_hostname
 }
 
 resource "azurerm_dns_txt_record" "asuid" {
@@ -258,7 +262,7 @@ resource "azurerm_dns_txt_record" "asuid" {
   ttl                 = 60
 
   record {
-    value = azurerm_app_service.app.custom_domain_verification_id
+    value = azurerm_linux_web_app.app.custom_domain_verification_id
   } 
 }
 
@@ -266,8 +270,8 @@ resource "azurerm_app_service_custom_hostname_binding" "app" {
   count               = var.zone_name == "" ? 0 : 1
 
   hostname            = "${azurerm_dns_cname_record.app[0].name}.${azurerm_dns_cname_record.app[0].zone_name}"
-  app_service_name    = azurerm_app_service.app.name
-  resource_group_name = azurerm_app_service.app.resource_group_name
+  app_service_name    = azurerm_linux_web_app.app.name
+  resource_group_name = azurerm_linux_web_app.app.resource_group_name
 
   depends_on = [
     azurerm_dns_cname_record.app[0],
