@@ -50,3 +50,13 @@ variable "repository_name" {
 variable "tags" {
   type = map(string)
 }
+
+variable "zone_name" {
+  type    = string
+  default = ""
+}
+
+variable "zone_resource_group_name" {
+  type    = string
+  default = ""
+}

@@ -7,9 +7,9 @@ output "app_id" {
   value = azurerm_app_service.app.id
 }
 
-# output "hostname" {
-#   value = azurerm_app_service_custom_hostname_binding.app.hostname
-# }
+output "hostname" {
+  value = azurerm_app_service.app.default_site_hostname
+}
 
 output "app_service_name" {
   value = azurerm_app_service.app.name

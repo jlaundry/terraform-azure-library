@@ -232,46 +232,59 @@ resource "github_actions_secret" "azure_publish_profile" {
 }
 
 
-# data "azurerm_dns_zone" "zone" {
-#   name                = var.zone_name
-#   resource_group_name = var.zone_resource_group_name
-# }
+data "azurerm_dns_zone" "zone" {
+  count               = var.zone_name == "" ? 0 : 1
 
-# resource "azurerm_dns_cname_record" "app" {
-#   name                = "${var.application_name}.${var.env}"
-#   zone_name           = data.azurerm_dns_zone.zone.name
-#   resource_group_name = data.azurerm_dns_zone.zone.resource_group_name
-#   ttl                 = 60
-#   record              = azurerm_app_service.app.default_site_hostname
-# }
+  name                = var.zone_name
+  resource_group_name = var.zone_resource_group_name
+}
 
-# resource "azurerm_dns_txt_record" "asuid" {
-#   name                = "asuid.${azurerm_dns_cname_record.app.name}"
-#   zone_name           = data.azurerm_dns_zone.zone.name
-#   resource_group_name = data.azurerm_dns_zone.zone.resource_group_name
-#   ttl                 = 60
+resource "azurerm_dns_cname_record" "app" {
+  count               = var.zone_name == "" ? 0 : 1
 
-#   record {
-#     value = azurerm_app_service.app.custom_domain_verification_id
-#   } 
-# }
+  name                = "${var.name}.${var.env}"
+  zone_name           = data.azurerm_dns_zone.zone[0].name
+  resource_group_name = data.azurerm_dns_zone.zone[0].resource_group_name
+  ttl                 = 60
+  record              = azurerm_app_service.app.default_site_hostname
+}
 
-# resource "azurerm_app_service_custom_hostname_binding" "app" {
-#   hostname            = "${azurerm_dns_cname_record.app.name}.${azurerm_dns_cname_record.app.zone_name}"
-#   app_service_name    = azurerm_app_service.app.name
-#   resource_group_name = azurerm_app_service.app.resource_group_name
+resource "azurerm_dns_txt_record" "asuid" {
+  count               = var.zone_name == "" ? 0 : 1
 
-#   depends_on = [
-#     azurerm_dns_txt_record.asuid
-#   ]
-# }
+  name                = "asuid.${azurerm_dns_cname_record.app[0].name}"
+  zone_name           = data.azurerm_dns_zone.zone[0].name
+  resource_group_name = data.azurerm_dns_zone.zone[0].resource_group_name
+  ttl                 = 60
 
-# resource "azurerm_app_service_managed_certificate" "app" {
-#   custom_hostname_binding_id = azurerm_app_service_custom_hostname_binding.app.id
-# }
+  record {
+    value = azurerm_app_service.app.custom_domain_verification_id
+  } 
+}
 
-# resource "azurerm_app_service_certificate_binding" "app" {
-#   hostname_binding_id = azurerm_app_service_custom_hostname_binding.app.id
-#   certificate_id      = azurerm_app_service_managed_certificate.app.id
-#   ssl_state           = "SniEnabled"
-# }
+resource "azurerm_app_service_custom_hostname_binding" "app" {
+  count               = var.zone_name == "" ? 0 : 1
+
+  hostname            = "${azurerm_dns_cname_record.app[0].name}.${azurerm_dns_cname_record.app[0].zone_name}"
+  app_service_name    = azurerm_app_service.app.name
+  resource_group_name = azurerm_app_service.app.resource_group_name
+
+  depends_on = [
+    azurerm_dns_cname_record.app[0],
+    azurerm_dns_txt_record.asuid[0]
+  ]
+}
+
+resource "azurerm_app_service_managed_certificate" "app" {
+  count               = var.zone_name == "" ? 0 : 1
+
+  custom_hostname_binding_id = azurerm_app_service_custom_hostname_binding.app[0].id
+}
+
+resource "azurerm_app_service_certificate_binding" "app" {
+  count               = var.zone_name == "" ? 0 : 1
+
+  hostname_binding_id = azurerm_app_service_custom_hostname_binding.app[0].id
+  certificate_id      = azurerm_app_service_managed_certificate.app[0].id
+  ssl_state           = "SniEnabled"
+}
