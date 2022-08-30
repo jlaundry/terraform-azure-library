@@ -18,7 +18,7 @@ locals {
 
   instance_name        = "${lower(var.name)}-${local.suffix}-${random_id.instance_id.hex}"
   resource_group_name  = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
-  suffix               = "${lower(var.env)}-${lower(replace(var.location, " ", ""))}"
+  suffix               = var.suffix != "" ? var.suffix : "${lower(var.env)}-${lower(replace(var.location, " ", ""))}"
 }
 
 data "github_repository" "repo" {
