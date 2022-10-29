@@ -16,6 +16,11 @@ variable "auth_enabled" {
   default = false
 }
 
+variable "auth_issuer" {
+  type    = string
+  default = null
+}
+
 variable "auth_aad_client_id" {
   type    = string
   default = ""
@@ -23,7 +28,7 @@ variable "auth_aad_client_id" {
 
 variable "auth_aad_client_secret" {
   type      = string
-  default   = ""
+  default   = null
   sensitive = true
 }
 

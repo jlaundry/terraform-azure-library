@@ -105,22 +105,34 @@ resource "azurerm_linux_function_app" "func" {
     for_each = var.auth_enabled ? [1] : []
 
     content {
-      enabled = true
+      enabled                       = true
+      issuer                        = var.auth_issuer
+      token_store_enabled           = true
+      unauthenticated_client_action = "RedirectToLoginPage"
 
       dynamic "active_directory" {
         for_each = var.auth_aad_client_id == "" ? [] : [1]
 
         content {
-          client_id     = var.auth_aad_client_id
-          client_secret = var.auth_aad_client_secret
+          client_id                  = var.auth_aad_client_id
+          client_secret_setting_name = "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"
         }
       }
     }
   }
 
+  # dynamic "sticky_settings" {
+  #   for_each = var.auth_aad_client_secret == "" ? [] : [1]
+
+  #   app_setting_names = [
+  #     "MICROSOFT_PROVIDER_AUTHENTICATION_SECRET"
+  #   ]
+  # }
+
   app_settings = merge(
     {
       # FUNCTIONS_WORKER_RUNTIME = "python"
+      MICROSOFT_PROVIDER_AUTHENTICATION_SECRET = var.auth_aad_client_secret
     },
     var.app_settings,
   )
@@ -138,6 +150,13 @@ resource "azurerm_linux_function_app" "func" {
   }
 
   tags = var.tags
+
+  lifecycle {
+    ignore_changes = [
+      tags["hidden-link: /app-insights-instrumentation-key"],
+      tags["hidden-link: /app-insights-resource-id"]
+    ]
+  }
 }
 
 resource "github_actions_secret" "azure_app_service_name" {
@@ -159,4 +178,3 @@ resource "github_actions_secret" "azure_publish_profile" {
     password = local.app_service_password
   })
 }
-
