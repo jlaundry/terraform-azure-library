@@ -11,6 +11,22 @@ variable "application_stack" {
   }
 }
 
+variable "auth_enabled" {
+  type    = bool
+  default = false
+}
+
+variable "auth_aad_client_id" {
+  type    = string
+  default = ""
+}
+
+variable "auth_aad_client_secret" {
+  type      = string
+  default   = ""
+  sensitive = true
+}
+
 variable "env" {
   type = string
 }

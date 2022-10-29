@@ -101,6 +101,23 @@ resource "azurerm_linux_function_app" "func" {
     type = "SystemAssigned"
   }
 
+  dynamic "auth_settings" {
+    for_each = var.auth_enabled ? [1] : []
+
+    content {
+      enabled = true
+
+      dynamic "active_directory" {
+        for_each = var.auth_aad_client_id == "" ? [] : [1]
+
+        content {
+          client_id     = var.auth_aad_client_id
+          client_secret = var.auth_aad_client_secret
+        }
+      }
+    }
+  }
+
   app_settings = merge(
     {
       # FUNCTIONS_WORKER_RUNTIME = "python"
