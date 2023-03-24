@@ -24,6 +24,8 @@ locals {
   kv_django_secret_key_name = "djangosecretkey"
   kv_name                   = "kv${substr(replace(local.instance_name, "-", ""), 0, 14)}${random_id.instance_id.hex}"
 
+  app_service_plan_name = var.app_service_plan_name != "" ? var.app_service_plan_name : azurerm_service_plan.asp[0].name
+  app_service_plan_rg_name = var.app_service_plan_rg_name != "" ? var.app_service_plan_rg_name : azurerm_service_plan.asp[0].resource_group_name
   resource_group_name = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
   suffix       = "${lower(var.env)}-${lower(replace(var.location, " ", ""))}"
 }
@@ -159,9 +161,22 @@ resource "azurerm_application_insights" "appi" {
   tags = var.tags
 }
 
+resource "azurerm_service_plan" "asp" {
+  count               = var.app_service_plan_name == "" ? 1 : 0
+
+  name                = "asp-${local.instance_name}"
+  location            = var.location
+  resource_group_name = local.resource_group_name
+
+  os_type             = var.asp_os_type
+  sku_name            = var.asp_sku_name
+
+  tags = var.tags
+}
+
 data "azurerm_service_plan" "asp" {
-  name                = var.app_service_plan_name
-  resource_group_name = var.app_service_plan_rg_name
+  name                = local.app_service_plan_name
+  resource_group_name = local.app_service_plan_rg_name
 }
 
 resource "azurerm_linux_web_app" "app" {

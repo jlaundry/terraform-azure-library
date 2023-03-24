@@ -1,10 +1,12 @@
 
 variable "app_service_plan_name" {
   type = string
+  default = ""
 }
 
 variable "app_service_plan_rg_name" {
   type = string
+  default = ""
 }
 
 variable "app_settings" {
@@ -15,8 +17,18 @@ variable "app_settings" {
 variable "application_stack" {
   type        = map(string)
   default     = {
-    python_version = "3.9"
+    python_version = "3.10"
   }
+}
+
+variable "asp_os_type" {
+  type    = string
+  default = "Linux"
+}
+
+variable "asp_sku_name" {
+  type    = string
+  default = "B1"
 }
 
 variable "database_url" {

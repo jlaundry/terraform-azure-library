@@ -22,3 +22,7 @@ output "app_service_user" {
 output "app_service_password" {
   value = local.app_service_password
 }
+
+output "identity" {
+    value = azurerm_linux_web_app.app.identity
+}
