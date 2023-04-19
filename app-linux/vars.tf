@@ -66,6 +66,11 @@ variable "repository_name" {
   type = string
 }
 
+variable "suffix" {
+  type    = string
+  default = ""
+}
+
 variable "tags" {
   type = map(string)
 }
