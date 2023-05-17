@@ -48,6 +48,8 @@ resource "azurerm_management_lock" "monitor-lock" {
     azurerm_monitor_activity_log_alert.create_update_or_delete_sql_server_firewall_rule,
     azurerm_monitor_activity_log_alert.delete_storage_account,
     azurerm_monitor_activity_log_alert.create_or_update_storage_account,
+    azurerm_monitor_activity_log_alert.create_or_update_public_ip_address,
+    azurerm_monitor_activity_log_alert.delete_public_ip_address,
   ]
 }
 

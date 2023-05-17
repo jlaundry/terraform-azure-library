@@ -430,3 +430,35 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_storage_account"
     action_group_id = azurerm_monitor_action_group.action.id
   }
 }
+
+resource "azurerm_monitor_activity_log_alert" "create_or_update_public_ip_address" {
+  name                = "Create or Update Public IP Address"
+  resource_group_name = azurerm_resource_group.monitor.name
+  scopes              = [ "/subscriptions/${var.subscription_id}" ]
+  description         = "This alert will monitor for Administrative:Microsoft.Network/publicIPAddresses/write events"
+
+  criteria {
+    operation_name = "Microsoft.Network/publicIPAddresses/write"
+    category       = "Administrative"
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.action.id
+  }
+}
+
+resource "azurerm_monitor_activity_log_alert" "delete_public_ip_address" {
+  name                = "Delete Public IP Address"
+  resource_group_name = azurerm_resource_group.monitor.name
+  scopes              = [ "/subscriptions/${var.subscription_id}" ]
+  description         = "This alert will monitor for Administrative:Microsoft.Network/publicIPAddresses/delete events"
+
+  criteria {
+    operation_name = "Microsoft.Network/publicIPAddresses/delete"
+    category       = "Administrative"
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.action.id
+  }
+}
