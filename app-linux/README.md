@@ -44,3 +44,41 @@ Other variables include:
   * `resource_group_name` - if provided, this module will skip creation of a new RG
   * `suffix` - if you want to replace `dev-australiaeast` with something else (why?)
   * `zone_name` and `zone_resource_group_name` - if provided, this module will create the `example.{zone_name}` DNS records, and setup an automatic SSL certificate
+
+## GitHub Action to Deploy
+
+If the `github_repository_name` var has been set, you can use the following example to deploy to the Function automatically:
+
+```yaml
+name: Deploy to Dev
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+env:
+  PYTHON_VERSION: '3.10'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Remove unnecessary files
+      run: |
+        rm -rf ./.deployment
+        rm -rf ./.git*
+        rm -rf ./.vscode
+        rm -rf ./README.md
+
+    - name: Deploy to Azure Functions
+      uses: azure/functions-action@v1.5.0
+      with:
+        app-name: ${{ secrets.DEV_AZURE_APP_SERVICE_NAME }}
+        publish-profile: ${{ secrets.DEV_AZURE_PUBLISH_PROFILE }}
+        scm-do-build-during-deployment: ''
+        enable-oryx-build: ''
+```
