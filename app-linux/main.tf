@@ -34,7 +34,9 @@ data "azurerm_client_config" "current" {
 }
 
 data "github_repository" "repo" {
-  full_name = var.repository_name
+  count    = var.github_repository_name == "" ? 0 : 1
+
+  full_name = var.github_repository_name
 }
 
 resource "random_id" "instance_id" {
@@ -247,13 +249,17 @@ resource "azurerm_linux_web_app" "app" {
 }
 
 resource "github_actions_secret" "azure_app_service_name" {
-  repository       = data.github_repository.repo.name
+  count    = var.github_repository_name == "" ? 0 : 1
+  
+  repository       = data.github_repository.repo[0].name
   secret_name      = "${upper(var.env)}_AZURE_APP_SERVICE_NAME"
   plaintext_value  = local.app_service_host
 }
 
 resource "github_actions_secret" "azure_publish_profile" {
-  repository       = data.github_repository.repo.name
+  count    = var.github_repository_name == "" ? 0 : 1
+  
+  repository       = data.github_repository.repo[0].name
   secret_name      = "${upper(var.env)}_AZURE_PUBLISH_PROFILE"
   plaintext_value  = templatefile("${path.module}/publish.xml.tmpl", {
     host = local.app_service_host

@@ -40,6 +40,11 @@ variable "env" {
   type = string
 }
 
+variable "github_repository_name" {
+  type    = string
+  default = ""
+}
+
 variable "ip_allowlist" {
   type = list(string)
 }
@@ -60,10 +65,6 @@ variable "name" {
 variable "resource_group_name" {
   type    = string
   default = ""
-}
-
-variable "repository_name" {
-  type = string
 }
 
 variable "suffix" {
