@@ -34,6 +34,7 @@ variable "asp_sku_name" {
 variable "database_url" {
   type    = string
   default = ""
+  sensitive = true
 }
 
 variable "env" {
