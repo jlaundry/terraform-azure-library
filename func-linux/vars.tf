@@ -7,7 +7,7 @@ variable "app_settings" {
 variable "application_stack" {
   type        = map(string)
   default     = {
-    python_version = "3.9"
+    python_version = "3.10"
   }
 }
 
