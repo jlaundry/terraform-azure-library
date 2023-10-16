@@ -88,9 +88,9 @@ resource "azuread_directory_role" "directory_reader" {
   display_name = "Directory Readers"
 }
 
-resource "azuread_directory_role_member" "db_directory_reader" {
-  role_object_id   = azuread_directory_role.directory_reader.object_id
-  member_object_id = data.azuread_service_principal.db.object_id
+resource "azuread_directory_role_assignment" "db_directory_reader" {
+  role_id             = azuread_directory_role.directory_reader.object_id
+  principal_object_id = data.azuread_service_principal.db.object_id
 }
 
 # resource "azuread_group_member" "db" {
