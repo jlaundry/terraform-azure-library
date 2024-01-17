@@ -8,10 +8,10 @@ output "function_app_name" {
 }
 
 output "log_analytics_workspace_id" {
-    value = azurerm_log_analytics_workspace.log.workspace_id
+    value = local.log_analytics_workspace_id
 }
 
 output "log_analytics_primary_shared_key" {
-    value     = azurerm_log_analytics_workspace.log.primary_shared_key
+    value     = join("", azurerm_log_analytics_workspace.log.*.primary_shared_key)
     sensitive = true
 }
