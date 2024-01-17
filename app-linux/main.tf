@@ -16,6 +16,8 @@ locals {
   app_service_user     = azurerm_linux_web_app.app.site_credential[0].name
   app_service_password = azurerm_linux_web_app.app.site_credential[0].password
 
+  github_env           = var.github_env != "" ? "${upper(var.github_env)}" : "${upper(var.env)}"
+
   instance_name = "${var.name}-${local.suffix}-${random_id.instance_id.hex}"
 
   kv_appinsights_instrumentationkey_name = "appinsightsikey"
@@ -252,7 +254,7 @@ resource "github_actions_secret" "azure_app_service_name" {
   count    = var.github_repository_name == "" ? 0 : 1
   
   repository       = data.github_repository.repo[0].name
-  secret_name      = "${upper(var.env)}_AZURE_APP_SERVICE_NAME"
+  secret_name      = "${local.github_env}_AZURE_APP_SERVICE_NAME"
   plaintext_value  = local.app_service_host
 }
 
@@ -260,7 +262,7 @@ resource "github_actions_secret" "azure_publish_profile" {
   count    = var.github_repository_name == "" ? 0 : 1
   
   repository       = data.github_repository.repo[0].name
-  secret_name      = "${upper(var.env)}_AZURE_PUBLISH_PROFILE"
+  secret_name      = "${local.github_env}_AZURE_PUBLISH_PROFILE"
   plaintext_value  = templatefile("${path.module}/publish.xml.tmpl", {
     host = local.app_service_host
     user = local.app_service_user

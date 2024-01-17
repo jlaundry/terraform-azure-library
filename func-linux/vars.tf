@@ -36,6 +36,11 @@ variable "env" {
   type = string
 }
 
+variable "github_env" {
+  type    = string
+  default = ""
+}
+
 variable "github_repository_name" {
   type    = string
   default = ""
