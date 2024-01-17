@@ -17,6 +17,7 @@ locals {
   app_service_password = azurerm_linux_function_app.func.site_credential[0].password
 
   github_env           = var.github_env != "" ? "${upper(var.github_env)}" : "${upper(var.env)}"
+  log_analytics_workspace_id = var.log_analytics_workspace_id != "" ? var.log_analytics_workspace_id : azurerm_log_analytics_workspace.log[0].id
 
   instance_name        = "${lower(var.name)}-${local.suffix}-${random_id.instance_id.hex}"
   resource_group_name  = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
@@ -57,6 +58,8 @@ resource "azurerm_storage_account" "app" {
 }
 
 resource "azurerm_log_analytics_workspace" "log" {
+  count    = var.log_analytics_workspace_id == "" ? 1 : 0
+
   name                = "log-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
@@ -71,7 +74,7 @@ resource "azurerm_application_insights" "appi" {
   name                = "appi-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  workspace_id        = azurerm_log_analytics_workspace.log.id
+  workspace_id        = local.log_analytics_workspace_id
 
   application_type    = "web"
 

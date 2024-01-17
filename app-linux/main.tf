@@ -26,6 +26,8 @@ locals {
   kv_django_secret_key_name = "djangosecretkey"
   kv_name                   = "kv${substr(replace(local.instance_name, "-", ""), 0, 14)}${random_id.instance_id.hex}"
 
+  log_analytics_workspace_id = var.log_analytics_workspace_id != "" ? var.log_analytics_workspace_id : azurerm_log_analytics_workspace.log[0].id
+
   app_service_plan_name    = var.app_service_plan_name != "" ? var.app_service_plan_name : azurerm_service_plan.asp[0].name
   app_service_plan_rg_name = var.app_service_plan_rg_name != "" ? var.app_service_plan_rg_name : azurerm_service_plan.asp[0].resource_group_name
   resource_group_name      = var.resource_group_name != "" ? var.resource_group_name : azurerm_resource_group.rg[0].name
@@ -155,6 +157,8 @@ resource "azurerm_storage_account" "app" {
 }
 
 resource "azurerm_log_analytics_workspace" "log" {
+  count    = var.log_analytics_workspace_id == "" ? 1 : 0
+
   name                = "log-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
@@ -169,7 +173,7 @@ resource "azurerm_application_insights" "appi" {
   name                = "appi-${local.instance_name}"
   location            = var.location
   resource_group_name = local.resource_group_name
-  workspace_id        = azurerm_log_analytics_workspace.log.id
+  workspace_id        = local.log_analytics_workspace_id
   application_type    = "web"
 
   retention_in_days   = 90

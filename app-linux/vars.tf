@@ -59,6 +59,11 @@ variable "location" {
   type = string
 }
 
+variable "log_analytics_workspace_id" {
+  type    = string
+  default = ""
+}
+
 variable "log_retention" {
   type    = number
   default = 30
