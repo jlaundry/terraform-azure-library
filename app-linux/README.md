@@ -65,7 +65,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Remove unnecessary files
       run: |
@@ -75,7 +75,7 @@ jobs:
         rm -rf ./README.md
 
     - name: Deploy to Azure Functions
-      uses: azure/functions-action@v1.5.0
+      uses: azure/functions-action@v1
       with:
         app-name: ${{ secrets.DEV_AZURE_APP_SERVICE_NAME }}
         publish-profile: ${{ secrets.DEV_AZURE_PUBLISH_PROFILE }}
