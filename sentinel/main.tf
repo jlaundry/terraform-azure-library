@@ -97,4 +97,10 @@ resource "azuread_application" "tiapp" {
       type = "Role"
     }
   }
+
+  lifecycle {
+    ignore_changes = [
+      owners,
+    ]
+  }
 }
