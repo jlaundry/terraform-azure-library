@@ -46,7 +46,7 @@ data "cloudflare_zones" "zone" {
 resource "cloudflare_record" "verification" {
   zone_id  = lookup(data.cloudflare_zones.zone.zones[0], "id")
   name     = "asverify.${var.domains[0]}"
-  value    = "asverify.${local.storage_account_name}.blob.core.windows.net"
+  content  = "asverify.${local.storage_account_name}.blob.core.windows.net"
   type     = "CNAME"
   ttl      = 1
   proxied  = false
@@ -102,7 +102,7 @@ resource "cloudflare_record" "cname" {
 
   zone_id  = lookup(data.cloudflare_zones.zone.zones[0], "id")
   name     = each.value
-  value    = azurerm_storage_account.public.primary_web_host
+  content  = azurerm_storage_account.public.primary_web_host
   type     = "CNAME"
   ttl      = 1
   proxied  = true
