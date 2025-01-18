@@ -2,6 +2,7 @@
 resource "azurerm_monitor_activity_log_alert" "create_or_update_roleAssignments" {
   name                = "Create or Update Role Assignment"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Authorization/roleAssignments/write events"
 
@@ -18,6 +19,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_roleAssignments"
 resource "azurerm_monitor_activity_log_alert" "delete_roleAssignments" {
   name                = "Delete Role Assignment"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Authorization/roleAssignments/delete events"
 
@@ -34,6 +36,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_roleAssignments" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_roleDefinitions" {
   name                = "Create or Update Role Definition"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Authorization/roleDefinitions/write events"
 
@@ -50,6 +53,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_roleDefinitions"
 resource "azurerm_monitor_activity_log_alert" "delete_roleDefinitions" {
   name                = "Delete Role Definition"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Authorization/roleDefinitions/delete events"
 

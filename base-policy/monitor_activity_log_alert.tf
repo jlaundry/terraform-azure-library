@@ -2,6 +2,7 @@
 resource "azurerm_monitor_activity_log_alert" "delete_policy_assignment" {
   name                = "Delete Policy Assignment"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Policy:Microsoft.Authorization/policyAssignments/delete events"
 
@@ -18,6 +19,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_policy_assignment" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_policy_assignment" {
   name                = "Create or Update Policy Assignment"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Policy:Microsoft.Authorization/policyAssignments/write events"
 
@@ -34,6 +36,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_policy_assignmen
 resource "azurerm_monitor_activity_log_alert" "deallocate_virtual_machine" {
   name                = "Deallocate Virtual Machine"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Compute/virtualMachines/deallocate/action events"
 
@@ -50,6 +53,7 @@ resource "azurerm_monitor_activity_log_alert" "deallocate_virtual_machine" {
 resource "azurerm_monitor_activity_log_alert" "delete_virtual_machine" {
   name                = "Delete Virtual Machine"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Compute/virtualMachines/delete events"
 
@@ -66,6 +70,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_virtual_machine" {
 resource "azurerm_monitor_activity_log_alert" "power_off_virtual_machine" {
   name                = "Power Off Virtual Machine"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Compute/virtualMachines/powerOff/action events"
 
@@ -82,6 +87,7 @@ resource "azurerm_monitor_activity_log_alert" "power_off_virtual_machine" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_virtual_machine" {
   name                = "Create or Update Virtual Machine"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Compute/virtualMachines/write events"
 
@@ -98,6 +104,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_virtual_machine"
 resource "azurerm_monitor_activity_log_alert" "delete_mysql_database" {
   name                = "Delete MySQL Database"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.DBforMySQL/servers/databases/delete events"
 
@@ -114,6 +121,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_mysql_database" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_mysql_database" {
   name                = "Create or Update MySQL Database"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.DBforMySQL/servers/databases/write events"
 
@@ -130,6 +138,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_mysql_database" 
 resource "azurerm_monitor_activity_log_alert" "delete_postgresql_database" {
   name                = "Delete PostgreSQL Database"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.DBforPostgreSQL/servers/databases/delete events"
 
@@ -146,6 +155,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_postgresql_database" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_postgresql_database" {
   name                = "Create or Update PostgreSQL Database"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.DBforPostgreSQL/servers/databases/write events"
 
@@ -162,6 +172,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_postgresql_datab
 resource "azurerm_monitor_activity_log_alert" "delete_key_vault" {
   name                = "Delete Key Vault"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.KeyVault/vaults/delete events"
 
@@ -178,6 +189,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_key_vault" {
 resource "azurerm_monitor_activity_log_alert" "update_key_vault" {
   name                = "Update Key Vault"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.KeyVault/vaults/write events"
 
@@ -194,6 +206,7 @@ resource "azurerm_monitor_activity_log_alert" "update_key_vault" {
 resource "azurerm_monitor_activity_log_alert" "delete_load_balancer" {
   name                = "Delete Load Balancer"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Network/loadBalancers/delete events"
 
@@ -210,6 +223,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_load_balancer" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_load_balancer" {
   name                = "Create or Update Load Balancer"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Network/loadBalancers/write events"
 
@@ -226,6 +240,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_load_balancer" {
 resource "azurerm_monitor_activity_log_alert" "delete_network_security_group" {
   name                = "Delete Network Security Group"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Network/networkSecurityGroups/delete events"
 
@@ -242,6 +257,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_network_security_group" {
 resource "azurerm_monitor_activity_log_alert" "delete_network_security_group_rule" {
   name                = "Delete Network Security Group Rule"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Network/networkSecurityGroups/securityRules/delete events"
 
@@ -258,6 +274,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_network_security_group_rul
 resource "azurerm_monitor_activity_log_alert" "create_or_update_network_security_group_rule" {
   name                = "Create or Update Network Security Group Rule"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Network/networkSecurityGroups/securityRules/write events"
 
@@ -274,6 +291,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_network_security
 resource "azurerm_monitor_activity_log_alert" "create_or_update_network_security_group" {
   name                = "Create or Update Network Security Group"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Network/networkSecurityGroups/write events"
 
@@ -290,6 +308,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_network_security
 resource "azurerm_monitor_activity_log_alert" "create_or_update_security_policy" {
   name                = "Create or Update Security Policy"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Security/policies/write events"
 
@@ -306,6 +325,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_security_policy"
 resource "azurerm_monitor_activity_log_alert" "delete_security_solution" {
   name                = "Delete Security Solution"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Security/securitySolutions/delete events"
 
@@ -322,6 +342,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_security_solution" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_security_solution" {
   name                = "Create or Update Security Solution"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Security/securitySolutions/write events"
 
@@ -338,6 +359,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_security_solutio
 resource "azurerm_monitor_activity_log_alert" "delete_azure_sql_database" {
   name                = "Delete Azure SQL Database"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Sql/servers/databases/delete events"
 
@@ -354,6 +376,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_azure_sql_database" {
 resource "azurerm_monitor_activity_log_alert" "rename_azure_sql_database" {
   name                = "Rename Azure SQL Database"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Sql/servers/databases/move/action events"
 
@@ -370,6 +393,7 @@ resource "azurerm_monitor_activity_log_alert" "rename_azure_sql_database" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_azure_sql_database" {
   name                = "Create or Update Azure SQL Database"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Sql/servers/databases/write events"
 
@@ -386,6 +410,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_azure_sql_databa
 resource "azurerm_monitor_activity_log_alert" "create_update_or_delete_sql_server_firewall_rule" {
   name                = "Create, Update or Delete SQL Server Firewall Rule"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Sql/servers/firewallRules/write events"
 
@@ -402,6 +427,7 @@ resource "azurerm_monitor_activity_log_alert" "create_update_or_delete_sql_serve
 resource "azurerm_monitor_activity_log_alert" "delete_storage_account" {
   name                = "Delete Storage Account"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Storage/storageAccounts/delete events"
 
@@ -418,6 +444,7 @@ resource "azurerm_monitor_activity_log_alert" "delete_storage_account" {
 resource "azurerm_monitor_activity_log_alert" "create_or_update_storage_account" {
   name                = "Create or Update Storage Account"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Storage/storageAccounts/write events"
 
@@ -434,6 +461,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_storage_account"
 resource "azurerm_monitor_activity_log_alert" "create_or_update_public_ip_address" {
   name                = "Create or Update Public IP Address"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Network/publicIPAddresses/write events"
 
@@ -450,6 +478,7 @@ resource "azurerm_monitor_activity_log_alert" "create_or_update_public_ip_addres
 resource "azurerm_monitor_activity_log_alert" "delete_public_ip_address" {
   name                = "Delete Public IP Address"
   resource_group_name = azurerm_resource_group.monitor.name
+  location            = azurerm_resource_group.monitor.location
   scopes              = [ "/subscriptions/${var.subscription_id}" ]
   description         = "This alert will monitor for Administrative:Microsoft.Network/publicIPAddresses/delete events"
 
