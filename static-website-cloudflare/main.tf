@@ -62,10 +62,6 @@ resource "azurerm_storage_account" "public" {
   min_tls_version          = "TLS1_2"
   allow_nested_items_to_be_public = true
 
-  static_website {
-    index_document = "index.html"
-  }
-
   custom_domain {
     name          = var.domains[0]
     use_subdomain = true
@@ -86,6 +82,18 @@ resource "azurerm_storage_account" "public" {
   depends_on = [
     cloudflare_record.verification
   ]
+
+  lifecycle {
+    ignore_changes = [
+      custom_domain[0].use_subdomain,
+    ]
+  }
+}
+
+resource "azurerm_storage_account_static_website" "public" {
+  storage_account_id = azurerm_storage_account.public.id
+  error_404_document = "404.html"
+  index_document     = "index.html"
 }
 
 resource "cloudflare_record" "cname" {
