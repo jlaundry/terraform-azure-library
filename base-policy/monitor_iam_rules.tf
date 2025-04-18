@@ -66,3 +66,37 @@ resource "azurerm_monitor_activity_log_alert" "delete_roleDefinitions" {
     action_group_id = azurerm_monitor_action_group.action.id
   }
 }
+
+resource "azurerm_monitor_activity_log_alert" "create_or_update_federatedIdentityCredentials" {
+  name                = "Create or Update Federated Credential"
+  resource_group_name = azurerm_resource_group.monitor.name
+  location            = "global"
+  scopes              = [ "/subscriptions/${var.subscription_id}" ]
+  description         = "This alert will monitor for Administrative:Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials/write events"
+
+  criteria {
+    operation_name = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials/write"
+    category       = "Administrative"
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.action.id
+  }
+}
+
+resource "azurerm_monitor_activity_log_alert" "delete_federatedIdentityCredentials" {
+  name                = "Delete Federated Credential"
+  resource_group_name = azurerm_resource_group.monitor.name
+  location            = "global"
+  scopes              = [ "/subscriptions/${var.subscription_id}" ]
+  description         = "This alert will monitor for Administrative:Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials/delete events"
+
+  criteria {
+    operation_name = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials/delete"
+    category       = "Administrative"
+  }
+
+  action {
+    action_group_id = azurerm_monitor_action_group.action.id
+  }
+}
